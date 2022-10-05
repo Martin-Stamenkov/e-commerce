@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import { client } from "./lib/client";
 
+const query = '*[_type == "product"]';
 function App() {
+  const [products, setProducts] = useState(null)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await client.fetch(query)
+      setProducts(data)
+    }
+    fetchData()
+  }, [])
+  console.log(products)
+
   return (
     <div className="App">
       <header className="App-header">
