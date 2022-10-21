@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
-import { client } from "./lib/client";
+import { commerce } from "./lib/client";
 
-const query = '*[_type == "product"]';
+
 function App() {
   const [products, setProducts] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await client.fetch(query)
-      setProducts(data)
+      commerce.categories.list().then((category) => console.log(category));
+      commerce.products.list().then((product) => console.log(product));
     }
     fetchData()
   }, [])
-  console.log(products)
 
   return (
     <div className="App">

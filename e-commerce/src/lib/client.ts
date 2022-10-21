@@ -1,14 +1,3 @@
-import sanityClient from "@sanity/client";
-import imageUrlBuilder from '@sanity/image-url';
+import Commerce from '@chec/commerce.js';
 
-export const client = sanityClient({
-    projectId: "jggagd3v",
-    dataset: "production",
-    apiVersion: "2022-10-05",
-    useCdn: true,
-    token: process.env.REACT_PUBLIC_SANITY_TOKEN
-})
-
-const builder = imageUrlBuilder(client)
-
-export const urlFor = (source: any) => builder.image(source)
+export const commerce = new Commerce('pk_test_4785727c60302d9f7b7f932fd0ddea0b5df847dd48de5');
