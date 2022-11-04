@@ -1,5 +1,5 @@
 import { Category } from "@chec/commerce.js/types/category";
-import { getCategories } from "category/api";
+import { getCategories } from "api";
 import React, { createContext, useMemo, useContext, useEffect, useState } from "react";
 
 interface ICommerceProvider {
@@ -16,7 +16,6 @@ export function CommerceProvider({ children }: ICommerceProvider) {
     const fetchCategories = async () => {
       const response = await getCategories();
       setCategories(response.data);
-      // commerce.products.list().then((product) => console.log(product));
     }
     fetchCategories()
   }, [])

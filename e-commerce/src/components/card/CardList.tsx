@@ -1,16 +1,16 @@
-import { Box,  } from '@mui/material'
-import { Category } from 'category/interfaces'
+import { Box, } from '@mui/material'
+import { Category } from 'api'
 import React from 'react'
-import Card from './Card'
+import { CategoryCard } from './CategoryCard'
 
 interface ICardList {
-    categories: Category[]
+    cards: Category[]
 }
 
-export function CardList({ categories }: ICardList) {
+export function CardList({ cards }: ICardList) {
     return (
         <Box display="flex" justifyContent="center">
-            {categories && categories.map(({assets, description, id, name, }) => <Card name={name} assets={assets} id={id} description={description}  />)}
+            {cards && cards.map(({ assets, description, id, name, slug }) => <CategoryCard name={name} key={id} assets={assets} path={slug?.toString()} id={id} description={description} />)}
         </Box>
 
     )

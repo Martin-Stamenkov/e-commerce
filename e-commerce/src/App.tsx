@@ -1,8 +1,10 @@
 import React from 'react';
-import { Layout } from './components';
+import {  Layout } from './components';
 import { ThemeProvider } from '@mui/styles';
 import { createTheme } from '@mui/material';
-import { CommerceProvider } from './provider/CommerceProvider';
+import { CommerceProvider } from './provider';
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'router';
 
 
 function App() {
@@ -12,7 +14,11 @@ function App() {
   return (
     <CommerceProvider>
       <ThemeProvider theme={theme}>
-        <Layout>{<></>}</Layout>
+        <BrowserRouter>
+          <Layout>
+            <Router />
+          </Layout>
+        </BrowserRouter>
       </ThemeProvider>
     </CommerceProvider>
   );

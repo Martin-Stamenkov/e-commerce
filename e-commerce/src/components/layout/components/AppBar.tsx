@@ -1,13 +1,14 @@
-import * as React from 'react';
-import { Badge, Card, CardMedia, IconButton, Theme } from '@mui/material';
+import { Badge, IconButton, Theme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { SearchBar } from './SearchBar';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { makeStyles } from '@mui/styles';
-import { useCommerce } from 'provider/CommerceProvider';
-import { CardList } from 'components/card/CardList';
+import { useCommerce } from 'provider';
+import { useNavigate } from 'react-router-dom';
+import { Category } from 'api';
+import { Card } from 'components';
 
 const useStyles = makeStyles((theme: Theme) => ({
     badge: {
@@ -29,9 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function AppBar() {
     const classes = useStyles();
     const { categories } = useCommerce();
-
-    console.log(categories)
-
+    const navigate = useNavigate()
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Toolbar>
@@ -42,7 +41,8 @@ export default function AppBar() {
                         noWrap
                         component="div"
                         color="black"
-                        sx={{ flexGrow: 1, justifyContent: "center", display: { xs: 'none', sm: 'flex' } }}
+                        onClick={() => navigate("/")}
+                        sx={{ flexGrow: 1, justifyContent: "center", display: { xs: 'none', sm: 'flex' }, cursor: "pointer", marginRight: "160px" }}
                     >
                         Commerce
                     </Typography>
@@ -53,7 +53,9 @@ export default function AppBar() {
                     </Badge>
                 </IconButton>
             </Toolbar>
-         <CardList categories={categories} />
+            <Box display="flex" justifyContent="center">
+                {categories && (categories as Category[]).map(({ assets, description, id, name, slug }) => <Card.Category name={name} key={id} assets={assets} path={slug?.toString()} id={id} description={description} />).reverse()}
+            </Box>
         </Box>
     );
 }

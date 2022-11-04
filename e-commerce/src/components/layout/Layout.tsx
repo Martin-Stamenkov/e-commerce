@@ -1,12 +1,12 @@
 import React from 'react'
 import AppBar from './components/AppBar'
 
-interface Props {
+interface ILayout {
     children: React.ReactNode
 }
 
 
-export function Layout({ children }: Props) {
+export function Layout({ children }: ILayout) {
     
     return (
         <>
