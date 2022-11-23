@@ -30,7 +30,9 @@ export interface Product {
     price: Price;
     path?: string;
     active?: boolean;
-    categories?: ParentCategory[]
+    categories?: ParentCategory[];
+    assets?: any;
+    variant_groups?: any[]
 }
 
 interface ParentCategory {

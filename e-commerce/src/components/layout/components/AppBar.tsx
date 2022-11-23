@@ -1,4 +1,4 @@
-import { Badge, IconButton, Theme } from '@mui/material';
+import { Badge, IconButton, LinearProgress, Theme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -53,9 +53,10 @@ export default function AppBar() {
                     </Badge>
                 </IconButton>
             </Toolbar>
-            <Box display="flex" justifyContent="center">
-                {categories && (categories as Category[]).map(({ assets, description, id, name, slug }) => <Card.Category name={name} key={id} assets={assets} path={slug?.toString()} id={id} description={description} />).reverse()}
-            </Box>
+            {!categories ? <LinearProgress /> : <Box display="flex" justifyContent="center">
+                {categories && (categories as Category[]).map(({ assets, description, id, name, slug }) =>
+                    <Card.Category name={name} key={id} assets={assets} path={slug?.toString()} id={id} description={description} />).reverse()}
+            </Box>}
         </Box>
     );
 }

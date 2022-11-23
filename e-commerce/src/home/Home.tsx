@@ -39,11 +39,11 @@ export function Home() {
             </Box>
             <Box>
                 <Banner src={boyFashionBanner} />
-                <ShopNavigation title="За малките дами" path="boys" buttonCaption="Пазарувай" />
+                <ShopNavigation title="За малките дами" path="girls" buttonCaption="Пазарувай" />
             </Box>
             <Box>
                 <Banner src={girlFashionBanner} />
-                <ShopNavigation title="За младите джентълмени" path="girls" buttonCaption="Пазарувай" />
+                <ShopNavigation title="За младите джентълмени" path="boys" buttonCaption="Пазарувай" />
             </Box>
         </Carousel>
     )

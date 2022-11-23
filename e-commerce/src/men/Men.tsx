@@ -1,8 +1,8 @@
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { getProductsByCategoryId } from 'api/api'
 import { Product } from 'api';
-import { Card, Category } from 'components'
-import React, { useEffect, useState } from 'react'
+import { Card, Category, Spinner } from 'components'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 export function Men() {
@@ -17,30 +17,23 @@ export function Men() {
     getProducts()
   }, [id])
 
-  console.log(id)
-  console.log(products)
-
   return (
-    <>
-      <Category title='Мъже'>
+    !products ? <Spinner /> :
+      <Category title='Мъже' totalProducts={products?.length}>
         <Grid container spacing={0.5} >
-          {products && products.map(({ image, description, id, name, slug, price }) =>
-            <>
-              <Grid item>
+          {products.map(({ image, description, id, name, slug, price }) =>
+            <Grid key={id} item >
               <Card.Product
                 name={name}
-                key={id}
                 image={image}
-                path={slug?.toString()}
+                path={id}
                 id={id}
                 description={description}
                 price={price}
               />
-            </Grid>                          
-            </>
+            </Grid>
           )}
-      </Grid>
-    </Category>
-    </>
+        </Grid>
+      </Category>
   )
 }
