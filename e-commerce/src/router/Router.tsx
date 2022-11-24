@@ -1,3 +1,4 @@
+import { Cart } from 'cart'
 import { Home } from 'home'
 import { Men } from 'men'
 import { Product } from 'product'
@@ -12,6 +13,7 @@ export function Router() {
                 <Route path={"/"} element={<Home />} />
                 <Route path={"/men"} element={<Men />} />
                 <Route path={"men/product/:id"} element={<Product />} />
+                <Route path={"/cart"} element={<Cart />} />
             </Routes>
         </>
     )

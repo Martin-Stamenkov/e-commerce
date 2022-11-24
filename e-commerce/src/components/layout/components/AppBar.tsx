@@ -29,8 +29,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function AppBar() {
     const classes = useStyles();
-    const { categories } = useCommerce();
-    const navigate = useNavigate()
+    const { categories, cart } = useCommerce();
+    const navigate = useNavigate();
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Toolbar>
@@ -47,13 +48,13 @@ export default function AppBar() {
                         Commerce
                     </Typography>
                 </Box>
-                <IconButton aria-label="cart">
-                    <Badge className={classes.badge} badgeContent={4} color="secondary">
+                <IconButton  onClick={() => navigate("/cart")} aria-label="cart">
+                    <Badge className={classes.badge} badgeContent={cart?.total_items} color="secondary">
                         <ShoppingCartIcon />
                     </Badge>
                 </IconButton>
             </Toolbar>
-            {!categories ? <LinearProgress /> : <Box display="flex" justifyContent="center">
+            {categories.length === 0 ? <LinearProgress /> : <Box display="flex" justifyContent="center">
                 {categories && (categories as Category[]).map(({ assets, description, id, name, slug }) =>
                     <Card.Category name={name} key={id} assets={assets} path={slug?.toString()} id={id} description={description} />).reverse()}
             </Box>}

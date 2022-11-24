@@ -1,15 +1,19 @@
 import React from 'react';
 import {  Layout } from './components';
-import { ThemeProvider } from '@mui/styles';
-import { createTheme } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CommerceProvider } from './provider';
 import { BrowserRouter } from 'react-router-dom';
 import { Router } from 'router';
 
 
 function App() {
-  const theme = createTheme();
-
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#000000',
+      },
+    },
+  });
 
   return (
     <CommerceProvider>

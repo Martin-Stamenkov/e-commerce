@@ -2,10 +2,12 @@ import { Box, Card, CardMedia, Typography } from '@mui/material'
 import { Product } from 'api'
 import React from 'react'
 import { Link, To } from 'react-router-dom'
+import { useStyles } from './CategoryCard';
 
 export function ProductCard({ price, name, image, path }: Product) {
+    const classes = useStyles();
     return (
-        <Link to={`product/${path as To}`}>
+        <Link className={classes.container} to={`product/${path as To}`}>
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",

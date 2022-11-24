@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getProductById } from './api';
 import { Product as ProductInterface } from 'api';
 import { Carousel } from 'react-responsive-carousel';
-import { Spinner } from 'components';
+import { Dialog, Spinner } from 'components';
 import { makeStyles } from '@mui/styles';
 import { Box, Typography, Autocomplete, TextField, Button } from '@mui/material';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import { addItemToCart } from 'cart/api/api';
+import { useCommerce } from 'provider';
 
 const useStyles = makeStyles(() => ({
   carousel: {
@@ -33,9 +35,11 @@ const useStyles = makeStyles(() => ({
   button: {
     width: 300,
     height: 56,
-    backgroundColor: "#000000 !important",
     "&:hover": {
       backgroundColor: "#000000d6 !important",
+    },
+    "&:disabled": {
+      backgroundColor: "#c2c9d6 !important",
     },
     "& span": {
       marginLeft: 6,
@@ -45,6 +49,11 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center"
+  },
+  spinner: {
+    "& span": {
+      color: "#ffffff"
+    }
   }
 }))
 
@@ -52,7 +61,10 @@ const useStyles = makeStyles(() => ({
 export function Product() {
   const classes = useStyles();
   const [product, setProduct] = useState<ProductInterface>();
+  const [orderIsFinished, setOrderIsFinished] = useState<boolean>(false);
   const { id } = useParams();
+  const { updateCart, loading, setLoading } = useCommerce();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getProduct = async () => {
@@ -64,7 +76,22 @@ export function Product() {
     getProduct();
   }, [id])
 
-  console.log(product)
+  const handleAddCardToItem = async () => {
+    setLoading(true)
+    if (id) {
+      await addItemToCart(id, 1)
+      updateCart();
+      setOrderIsFinished(true)
+    }
+  }
+
+  const handleClose = () => {
+    setLoading(false);
+    setOrderIsFinished(false);
+  }
+  const handleClick = () => {
+    navigate("/cart")
+  }
 
   return (
     !product ? <Spinner /> :
@@ -93,12 +120,36 @@ export function Product() {
               }
             />}
           <Box marginTop="10px">
-            <Button variant="contained" className={classes.button}>
-              <ShoppingBagIcon />
-              <Typography variant="caption">Добави в количката</Typography>
+            <Button variant="contained" disabled={loading} className={classes.button} onClick={handleAddCardToItem}>
+              {loading ?
+                <>
+                  <Spinner className={classes.spinner} size={30} />
+                  <Typography variant="caption">Извършване на поръчката</Typography>
+                </>
+                : <>
+                  <ShoppingBagIcon /><Typography variant="caption">Добави в количката</Typography>
+                </>
+              }
             </Button>
           </Box>
         </Box>
+        <Dialog
+          open={orderIsFinished && !loading}
+          handleClose={handleClose}
+          handleClick={handleClick}
+          cancelButtonCaption="Продължи пазаруването"
+          okButtonCaption="Отиди към количката"
+          title=" Продукта е добавен в пазарската ви количка"
+          children={
+            <Box display="flex">
+              <img alt="assets" style={{ width: 80 }} src={product.image?.url} />
+              <Box  display="flex" flexDirection="column">
+              <Typography variant="caption">{product.name}</Typography>
+              <Typography variant="h6">{product.price.formatted_with_code}</Typography>
+              </Box>
+            </Box>
+          }
+        />
       </Box>
   )
 }

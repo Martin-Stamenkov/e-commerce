@@ -4,7 +4,7 @@ import { Category } from 'api'
 import React from 'react'
 import { Link, To } from 'react-router-dom'
 
-const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles(() => ({
     container: {
         textDecoration: "none",
         color: "black",
