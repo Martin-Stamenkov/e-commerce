@@ -49,7 +49,7 @@ export default function AppBar() {
                     </Typography>
                 </Box>
                 <IconButton  onClick={() => navigate("/cart")} aria-label="cart">
-                    <Badge className={classes.badge} badgeContent={cart?.total_items} color="secondary">
+                    <Badge className={classes.badge} badgeContent={cart?.total_items} color="error">
                         <ShoppingCartIcon />
                     </Badge>
                 </IconButton>

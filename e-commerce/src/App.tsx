@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Layout } from './components';
+import { Layout } from './components';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CommerceProvider } from './provider';
 import { BrowserRouter } from 'react-router-dom';
@@ -11,7 +11,11 @@ function App() {
     palette: {
       primary: {
         main: '#000000',
+
       },
+      secondary: {
+        main: "#0c4cc7"
+      }
     },
   });
 

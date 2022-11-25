@@ -20,7 +20,7 @@ export function Men() {
   return (
     !products ? <Spinner /> :
       <Category title='Мъже' totalProducts={products?.length}>
-        <Grid container spacing={0.5} >
+        <Grid container spacing={0.5} marginTop="10px" >
           {products.map(({ image, description, id, name, slug, price }) =>
             <Grid key={id} item >
               <Card.Product

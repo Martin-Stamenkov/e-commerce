@@ -1,5 +1,6 @@
 import { Asset } from "@chec/commerce.js/types/asset";
 import { Price } from "@chec/commerce.js/types/price";
+import { ProductVariantGroup } from "@chec/commerce.js/types/product-variant-group";
 
 export interface Category {
     id: string;
@@ -25,16 +26,15 @@ export interface Product {
     id: string;
     slug?: string;
     name: string;
-    description: string;
+    description?: string;
     image: Asset | null;
     price: Price;
     path?: string;
     active?: boolean;
     categories?: ParentCategory[];
-    assets?: any;
-    variant_groups?: any[]
+    assets?: Asset[];
+    variant_groups?: ProductVariantGroup[];
 }
-
 interface ParentCategory {
     id: string;
     name: string;

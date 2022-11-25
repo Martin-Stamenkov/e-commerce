@@ -9,6 +9,7 @@ import { Box, Typography, Autocomplete, TextField, Button } from '@mui/material'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import { addItemToCart } from 'cart/api/api';
 import { useCommerce } from 'provider';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const useStyles = makeStyles(() => ({
   carousel: {
@@ -98,7 +99,7 @@ export function Product() {
       <Box className={classes.container}>
         <Box style={{ width: 360, height: 300 }}>
           <Carousel className={classes.carousel}>
-            {product?.assets.map((a: any) => <img alt="assets" src={a.url} />
+            {product?.assets?.map((a) => <img alt="assets" src={a.url} />
             )}
           </Carousel>
         </Box>
@@ -137,15 +138,17 @@ export function Product() {
           open={orderIsFinished && !loading}
           handleClose={handleClose}
           handleClick={handleClick}
+          icon={<CheckCircleOutlineIcon color="success" sx={{ width: 44, height: 44 }} />}
           cancelButtonCaption="Продължи пазаруването"
           okButtonCaption="Отиди към количката"
           title=" Продукта е добавен в пазарската ви количка"
           children={
             <Box display="flex">
               <img alt="assets" style={{ width: 80 }} src={product.image?.url} />
-              <Box  display="flex" flexDirection="column">
-              <Typography variant="caption">{product.name}</Typography>
-              <Typography variant="h6">{product.price.formatted_with_code}</Typography>
+              <Box display="flex" flexDirection="column" marginLeft="10px">
+                <Typography variant="caption">{product.name}</Typography>
+                {/* <Typography variant="caption">{product.variant_groups[0].}</Typography> */}
+                <Typography variant="h6">{product.price.formatted_with_code}</Typography>
               </Box>
             </Box>
           }

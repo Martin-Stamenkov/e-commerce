@@ -1,9 +1,11 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import { Dialog as MUIDialog } from '@mui/material';
+import { Dialog as MUIDialog, SvgIconTypeMap } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { ReactElement } from 'react';
+import { Box } from '@mui/system';
 
 interface IDialog {
     open: boolean;
@@ -13,9 +15,10 @@ interface IDialog {
     cancelButtonCaption?: string;
     okButtonCaption?: string;
     children?: React.ReactNode;
+    icon?: ReactElement<any, any>;
 }
 
-export function Dialog({ open, handleClick, handleClose, cancelButtonCaption, okButtonCaption, title, children }: IDialog) {
+export function Dialog({ open, handleClick, handleClose, cancelButtonCaption, okButtonCaption, title, children, icon }: IDialog) {
 
     return (
         <>
@@ -25,16 +28,19 @@ export function Dialog({ open, handleClick, handleClose, cancelButtonCaption, ok
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle>
-                    {title}
+                    <Box display="flex" justifyContent="center" marginTop="10px">
+                        {icon}
+                    </Box>
+                <DialogTitle sx={{paddingTop: "6px"}}>
+                        {title}
                 </DialogTitle>
                 <DialogContent>
-                   {children}
+                    {children}
                 </DialogContent>
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>{cancelButtonCaption}</Button>
                     <Button variant="contained" onClick={handleClick} autoFocus>
-                       {okButtonCaption}
+                        {okButtonCaption}
                     </Button>
                 </DialogActions>
             </MUIDialog>
