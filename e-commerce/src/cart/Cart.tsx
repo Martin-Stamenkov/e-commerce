@@ -1,11 +1,13 @@
-import { Backdrop, Box, Button, Chip, CircularProgress, Divider, IconButton, Typography } from '@mui/material';
+import { Box, Button, Chip, Divider, IconButton, Typography } from '@mui/material';
 import { useCommerce } from 'provider'
 import React from 'react'
 import InfoIcon from '@mui/icons-material/Info';
-import { Card, Spinner } from 'components';
+import { Backdrop, Card, Spinner } from 'components';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { commerce } from 'config';
+import { updateCartQuantity, removeItemFromCart } from './api';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+
 
 export function Cart() {
 
@@ -15,10 +17,18 @@ export function Cart() {
     }
 
     const handleUpdateClick = async (productId: string, quantity: number) => {
-        setLoading(true)
-        await commerce.cart.update(productId, { quantity })
-        updateCart()
+        setLoading(true);
+        await updateCartQuantity(productId, quantity);
+        updateCart();
     }
+
+    const handleRemoveItem = async (productId: string) => {
+        setLoading(true);
+        await removeItemFromCart(productId);
+        updateCart();
+    }
+
+
     return (
         <Box display="flex" justifyContent="end" marginTop="20px">
             <Box width="60%">
@@ -33,13 +43,22 @@ export function Cart() {
                     </Typography>
                 </Box>
                 <Box >
-                    {cart?.line_items.map(x => <Card.Expanded image={x.image} name={x.name} id={x.id} price={x.line_total} children={
-                        <Box>
-                            <IconButton onClick={() => handleUpdateClick(x.id, x.quantity + 1)}><AddIcon /></IconButton>
-                            <Chip label={x.quantity} variant="outlined" />
-                            <IconButton onClick={() => handleUpdateClick(x.id, x.quantity - 1)}><RemoveIcon /></IconButton>
-                        </Box>
-                    } />
+                    {cart?.line_items.map(x => <Card.Expanded
+                        image={x.image}
+                        name={x.name}
+                        id={x.id}
+                        path={`../product/${x.product_id}`}
+                        price={x.line_total}
+                        handleButtonClick={() => handleRemoveItem(x.id)}
+                        children={
+                            <Box>
+                                <IconButton onClick={() => handleUpdateClick(x.id, x.quantity + 1)}><AddIcon /></IconButton>
+                                <Chip label={x.quantity} variant="outlined" />
+                                <IconButton onClick={() => handleUpdateClick(x.id, x.quantity - 1)}><RemoveIcon /></IconButton>
+                            </Box>
+                        }
+                        icon={<DeleteOutlineIcon />}
+                    />
                     )}
                 </Box>
             </Box>
@@ -59,12 +78,7 @@ export function Cart() {
                     Финализирай поръчката
                 </Button>
             </Box>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme: { zIndex: { drawer: number; }; }) => theme.zIndex.drawer + 1 }}
-                open={loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
+            <Backdrop open={loading} />
         </Box>
     )
 }
