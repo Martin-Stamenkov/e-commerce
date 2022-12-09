@@ -7,27 +7,30 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { updateCartQuantity, removeItemFromCart } from './api';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { useNavigate } from 'react-router-dom';
 
 
 export function Cart() {
-
     const { cart, updateCart, loading, setLoading } = useCommerce();
+    const navigate = useNavigate()
+
     if (!cart) {
         return <Spinner />
     }
 
-    const handleUpdateClick = async (productId: string, quantity: number) => {
+    const handleUpdateClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, productId: string, quantity: number) => {
+        event.stopPropagation()
         setLoading(true);
         await updateCartQuantity(productId, quantity);
         updateCart();
     }
 
-    const handleRemoveItem = async (productId: string) => {
+    const handleRemoveItem = async (event: React.MouseEvent<{}, MouseEvent>, productId: string) => {
+        event.stopPropagation()
         setLoading(true);
         await removeItemFromCart(productId);
         updateCart();
     }
-
 
     return (
         <Box display="flex" justifyContent="end" marginTop="20px">
@@ -39,7 +42,10 @@ export function Cart() {
                 <Box marginTop="10px" display="flex" alignItems="center">
                     <InfoIcon color='secondary' />
                     <Typography sx={{ marginLeft: "6px" }} color="secondary" variant="caption">
-                        Купете сега, добавянето на артикули в количката не означава резервацията им.
+                        {cart.line_items.length > 0 ?
+                            "Купете сега, добавянето на артикули в количката не означава резервацията им."
+                            : "Количката ви е празна"
+                        }
                     </Typography>
                 </Box>
                 <Box >
@@ -49,12 +55,12 @@ export function Cart() {
                         id={x.id}
                         path={`../product/${x.product_id}`}
                         price={x.line_total}
-                        handleButtonClick={() => handleRemoveItem(x.id)}
+                        handleButtonClick={(e) => handleRemoveItem(e, x.id)}
                         children={
                             <Box>
-                                <IconButton onClick={() => handleUpdateClick(x.id, x.quantity + 1)}><AddIcon /></IconButton>
+                                <IconButton onClick={(e) => handleUpdateClick(e, x.id, x.quantity + 1)}><AddIcon /></IconButton>
                                 <Chip label={x.quantity} variant="outlined" />
-                                <IconButton onClick={() => handleUpdateClick(x.id, x.quantity - 1)}><RemoveIcon /></IconButton>
+                                <IconButton onClick={(e) => handleUpdateClick(e, x.id, x.quantity - 1)}><RemoveIcon /></IconButton>
                             </Box>
                         }
                         icon={<DeleteOutlineIcon />}
@@ -74,7 +80,7 @@ export function Cart() {
                     </Box>
                     <Divider />
                 </Box>
-                <Button sx={{ height: "50px" }} variant="contained">
+                <Button sx={{ height: "50px" }} variant="contained" onClick={() => navigate("/checkout")}>
                     Финализирай поръчката
                 </Button>
             </Box>

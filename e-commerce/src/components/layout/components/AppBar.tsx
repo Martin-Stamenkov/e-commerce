@@ -9,6 +9,7 @@ import { useCommerce } from 'provider';
 import { useNavigate } from 'react-router-dom';
 import { Category } from 'api';
 import { Card } from 'components';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const useStyles = makeStyles((theme: Theme) => ({
     badge: {
@@ -25,9 +26,14 @@ const useStyles = makeStyles((theme: Theme) => ({
         alignItems: "center"
     }
 }));
+interface IAppBar {
+    hideCategories?: boolean;
+    hideCart?: boolean;
+    withBackNavigation?: boolean
+}
 
 
-export default function AppBar() {
+export default function AppBar({ hideCart, hideCategories, withBackNavigation }: IAppBar) {
     const classes = useStyles();
     const { categories, cart } = useCommerce();
     const navigate = useNavigate();
@@ -36,7 +42,15 @@ export default function AppBar() {
         <Box sx={{ flexGrow: 1 }}>
             <Toolbar>
                 <Box className={classes.contentContainer}>
-                    <SearchBar />
+                    {withBackNavigation ?
+                        <Box>
+
+                            <IconButton onClick={() => navigate(-1)}>
+                                <ArrowBackIosIcon />
+                            </IconButton>
+                                Към Количката
+                        </Box>
+                        : <SearchBar />}
                     <Typography
                         variant="h6"
                         noWrap
@@ -48,15 +62,17 @@ export default function AppBar() {
                         Commerce
                     </Typography>
                 </Box>
-                <IconButton  onClick={() => navigate("/cart")} aria-label="cart">
+                {!hideCart && <IconButton onClick={() => navigate("/cart")} aria-label="cart">
                     <Badge className={classes.badge} badgeContent={cart?.total_items} color="error">
                         <ShoppingCartIcon />
                     </Badge>
-                </IconButton>
+                </IconButton>}
             </Toolbar>
-            {categories.length === 0 ? <LinearProgress /> : <Box display="flex" justifyContent="center">
-                {categories && (categories as Category[]).map(({ assets, description, id, name, slug }) =>
-                    <Card.Category name={name} key={id} assets={assets} path={slug?.toString()} id={id} description={description} />).reverse()}
+            {!hideCategories && <Box>
+                {categories.length === 0 ? <LinearProgress /> : <Box display="flex" justifyContent="center">
+                    {categories && (categories as Category[]).map(({ assets, description, id, name, slug }) =>
+                        <Card.Category name={name} key={id} assets={assets} path={slug?.toString()} id={id} description={description} />).reverse()}
+                </Box>}
             </Box>}
         </Box>
     );

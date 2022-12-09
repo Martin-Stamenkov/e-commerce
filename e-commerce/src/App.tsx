@@ -1,5 +1,4 @@
 import React from 'react';
-import { Layout } from './components';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CommerceProvider } from './provider';
 import { BrowserRouter } from 'react-router-dom';
@@ -23,9 +22,7 @@ function App() {
     <CommerceProvider>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <Layout>
             <Router />
-          </Layout>
         </BrowserRouter>
       </ThemeProvider>
     </CommerceProvider>

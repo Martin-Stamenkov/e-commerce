@@ -1,1 +1,1 @@
-export { getCart, addItemToCart, updateCartQuantity, removeItemFromCart } from "./api"
+export { getCart, addItemToCart, updateCartQuantity, removeItemFromCart, refreshCart } from "./api"

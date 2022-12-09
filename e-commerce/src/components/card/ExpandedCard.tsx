@@ -2,7 +2,7 @@ import { Box, Divider, IconButton, Typography } from '@mui/material'
 import { Product } from 'api'
 import React, { MouseEventHandler, ReactElement } from 'react'
 import { makeStyles } from '@mui/styles';
-import { To, Link } from 'react-router-dom';
+import { To, Link, useNavigate } from 'react-router-dom';
 
 
 export const useStyles = makeStyles(() => ({
@@ -11,12 +11,9 @@ export const useStyles = makeStyles(() => ({
         display: "flex",
         justifyContent: "space-between",
         minHeight: "120px",
-    },
-    link: {
-        textDecoration: "none",
-        color: "black",
         "&:hover": {
             textDecoration: "underline",
+            cursor: "pointer",
         },
     },
     priceContainer: {
@@ -35,15 +32,15 @@ interface IExpandedCard extends Product {
     children?: React.ReactNode;
     handleButtonClick?: MouseEventHandler<{}> | undefined;
     icon?: ReactElement<any, any>;
-
 }
 
 export function ExpandedCard({ price, name, image, path, children, handleButtonClick, icon }: IExpandedCard) {
     const classes = useStyles();
+    const navigate = useNavigate();
 
     return (
-        <Link className={classes.link} to={path as To}>
-            <Box className={classes.container}>
+        <>
+            <Box onClick={() => navigate(path as To)} sx={{}} className={classes.container}>
                 <Box display="flex">
                     <img alt="assets" style={{ width: 100 }} src={image?.url} />
                     <Box className={classes.info}>
@@ -61,6 +58,6 @@ export function ExpandedCard({ price, name, image, path, children, handleButtonC
             <Box marginTop="20px" marginBottom="20px">
                 <Divider />
             </Box>
-        </Link>
+        </>
     )
 }
