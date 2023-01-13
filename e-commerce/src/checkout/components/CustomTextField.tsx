@@ -9,23 +9,20 @@ interface ICustomTextField {
     multiline?: boolean;
     value?: string;
     onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+
 }
 
-export function CustomTextField({ label, name, required, multiline, value, onChange }: ICustomTextField) {
-    const { control } = useFormContext()
+export function CustomTextField({ label, name }: ICustomTextField) {
     return (
         <Grid item xs={12} sm={5}>
-            <Controller name={name} control={control}
-                render={({ field, fieldState }) => (
+            <Controller name={name}
+                render={({ field }) => (
                     <TextField
                         label={label}
-                        multiline={multiline}
                         variant="standard"
-                        value={value}
-                        required={required}
-                        onChange={onChange}
-                        error={!!fieldState.error}
-                        helperText={fieldState.error ? fieldState.error.message : null}
+                        {...field}
+                        required
+                        
                     />
                 )} />
         </Grid>

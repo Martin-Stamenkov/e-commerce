@@ -10,10 +10,11 @@ interface IReview {
     total: string;
     handleBack: () => void;
     addressInformation: FieldValues;
-    handleCaptureCheckout: (checkoutTokenId: string, newOrder: CheckoutCapture) => Promise<void>
+    handleCaptureCheckout: (checkoutTokenId: string, newOrder: CheckoutCapture) => Promise<void>;
+    handleNext: () => void;
 }
 
-export function Review({ checkoutToken, total, handleBack, addressInformation, handleCaptureCheckout }: IReview) {
+export function Review({ checkoutToken, total, handleBack, addressInformation, handleCaptureCheckout, handleNext }: IReview) {
     return (
         <Box>
             <Typography sx={{ fontWeight: "700" }} >
@@ -40,7 +41,7 @@ export function Review({ checkoutToken, total, handleBack, addressInformation, h
             <Typography sx={{ fontWeight: "500", marginTop: "8px", display: "flex", justifyContent: "end" }} >
                 Обща сума: {total}
             </Typography>
-            <PaymentForm checkoutToken={checkoutToken} addressInformation={addressInformation} handleBack={handleBack} handleCaptureCheckout={handleCaptureCheckout} />
+            <PaymentForm handleNext={handleNext} checkoutToken={checkoutToken} addressInformation={addressInformation} handleBack={handleBack} handleCaptureCheckout={handleCaptureCheckout} />
         </Box>
     )
 }

@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from '@mui/material'
-import React from 'react'
+import React, { } from 'react'
 import { useForm, FormProvider, FieldValues } from 'react-hook-form'
 import { CustomTextField } from '../components'
 
@@ -15,7 +15,7 @@ export function AddressForm({ next }: IAdressFormProps) {
                 Вашите данни за поръчка
             </Typography>
             <FormProvider {...methods} >
-                <form onSubmit={methods.handleSubmit((data) =>  next(data))}>
+                <form onSubmit={methods.handleSubmit((data) => next(data))}>
                     <Grid container spacing={3}>
                         <CustomTextField name="firstName" label="Име" required />
                         <CustomTextField name="lastName" label="Фамилия" required />

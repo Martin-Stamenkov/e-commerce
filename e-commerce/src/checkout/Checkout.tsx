@@ -3,13 +3,14 @@ import { CheckoutCaptureResponse } from '@chec/commerce.js/types/checkout-captur
 import { CheckoutToken } from '@chec/commerce.js/types/checkout-token';
 import { Box, Typography, Divider, Button, Step, StepContent, StepLabel, Stepper } from '@mui/material'
 import { refreshCart } from 'cart/api';
-import { Card } from 'components';
+import { Card, Spinner } from 'components';
 import { useCommerce } from 'provider';
 import { useEffect, useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { captureCheckout, generateToken } from './api/api';
 import { Review } from './components';
 import { AddressForm } from './form/AddressForm';
+import { Confirmation } from './form/Confirmation';
 
 const steps = ["Данни за получаване", "Детайли по поръчка"]
 
@@ -18,13 +19,12 @@ export function Checkout() {
     const [activeStep, setActiveStep] = useState(0);
     const [addressInformation, setAddressInformation] = useState<FieldValues>({});
     const [checkoutToken, setCheckoutToken] = useState<CheckoutToken>();
-    const [order, setOrder] = useState<CheckoutCaptureResponse>();
-
 
     useEffect(() => {
         const fetchToken = async () => {
             if (cart) {
                 const token = await generateToken(cart.id);
+                console.log(token)
                 setCheckoutToken(token);
             }
         }
@@ -32,7 +32,6 @@ export function Checkout() {
     }, [cart])
 
     const handleNext = () => {
-        console.log("test")
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
@@ -41,7 +40,6 @@ export function Checkout() {
     };
 
     const next = (data: FieldValues) => {
-        console.log("test")
         setAddressInformation(data)
         handleNext()
     };
@@ -52,17 +50,30 @@ export function Checkout() {
     }
 
     const handleCaptureCheckout = async (checkoutTokenId: string, newOrder: CheckoutCapture) => {
-        const incomingOrder = await captureCheckout(checkoutTokenId, newOrder);
-        setOrder(incomingOrder);
+        await captureCheckout(checkoutTokenId, newOrder);
         refreshCartAfterOrder();
     };
+
+    const Form = () => {
+        return (
+            cart && checkoutToken && activeStep === 1 ?
+                <Review
+                    handleNext={handleNext}
+                    handleCaptureCheckout={handleCaptureCheckout}
+                    addressInformation={addressInformation}
+                    handleBack={handleBack}
+                    total={cart.subtotal.formatted_with_code}
+                    checkoutToken={checkoutToken} /> : <AddressForm next={next} />
+        )
+    }
+    console.log(steps.length)
 
     return (
         <Box display="flex" justifyContent="end" marginTop="20px" marginLeft={"12%"}>
             <Box width="50%">
                 <Box>
-                    <Stepper activeStep={activeStep} orientation="vertical">
-                        {checkoutToken && cart && steps.map((step, index) => (
+                    {!checkoutToken ? <Spinner /> : <Stepper activeStep={activeStep} orientation="vertical">
+                        {cart && steps.map((step, index) => (
                             <Step key={index}>
                                 <StepLabel
                                     optional={
@@ -74,18 +85,11 @@ export function Checkout() {
                                     {step}
                                 </StepLabel>
                                 <StepContent>
-                                    {index === 0 ? <AddressForm next={next} /> :
-                                     <Review
-                                     handleCaptureCheckout={handleCaptureCheckout}
-                                    //  order={order}
-                                      addressInformation={addressInformation} 
-                                     handleBack={handleBack}
-                                        total={cart.subtotal.formatted_with_code}
-                                        checkoutToken={checkoutToken} />}
+                                    {activeStep === steps.length ? <Confirmation /> : <Form />}
                                 </StepContent>
                             </Step>
                         ))}
-                    </Stepper>
+                    </Stepper>}
                 </Box>
             </Box>
             <Box sx={{
